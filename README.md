@@ -13,4 +13,4 @@ https://www.sciencedirect.com/science/article/pii/S1877705813016007
 * imageio
 
 ### Run
-* python kanjar.py < <path_to_folder_with_images> > <output_file.txt>
+* python kanjar.py < (path_to_folder_with_images) > (output_file.txt)
