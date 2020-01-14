@@ -8,9 +8,9 @@ by Kanjar De and V. Masilamani in the paper
 https://www.sciencedirect.com/science/article/pii/S1877705813016007
 
 ### Dependencies
-* Python
+* Python 3
 * Numpy
 * imageio
 
-### Test
-  python kanjar.py < <path_to_folder_with_images> > <output_file.txt>
+### Run
+* python kanjar.py < <path_to_folder_with_images> > <output_file.txt>
