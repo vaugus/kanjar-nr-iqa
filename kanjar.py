@@ -56,7 +56,7 @@ def main():
     path = str(input()).rstrip()
 
     # amount of images in the folder
-    n = len(os.listdir())
+    n = len(os.listdir(path))
 
     for i in range(1, n + 1):
         # read the image
