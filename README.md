@@ -1,19 +1,16 @@
 # Image Sharpness Measure for Blurred Images in Frequency Domain
 
 ## Introduction
-the file of local_blur_based_edge.cc implement the algoritm which described by https://ieeexplore.ieee.org/abstract/document/1038902, and we can use this algorithm to do blur detection.
+This script implements the no-reference image quality assessment index proposed
+by Kanjar De and V. Masilamani in the paper
+
+"Image Sharpness Measure for Blurred Images in Frequency Domain"
+https://www.sciencedirect.com/science/article/pii/S1877705813016007
 
 ### Dependencies
-* Python 3.x
+* Python 3
 * Numpy
 * imageio
 
-### Installation
-1. git clone https://github.com/PeterWang1986/blur.git
-2. mkdir build && cd build && cmake ..
-3. make
-
-### Test
-run build/local_blur_based_edge_test, you will see:
-* testdata/zy1.jpg blur= 19.694
-* testdata/zy2.jpg blur= 7.21562
+### Run
+* python kanjar.py < (path_to_folder_with_images) > (output_file.txt)
