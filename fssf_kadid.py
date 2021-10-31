@@ -34,9 +34,18 @@ https://www.sciencedirect.com/science/article/pii/S1877705813016007
 """
 
 import os
+import sys
 
 import numpy as np
+
+from scipy.stats import kurtosis
+
+import pywt
 import imageio
+import cv2
+from termcolor import colored
+from skimage.metrics import normalized_root_mse as nrmse
+
 
 __version__ = '1.0'
 __author__ = 'Victor Augusto'
@@ -52,30 +61,48 @@ def main():
 
     """
 
-    # folder with the images in the filesystem
-    path = str(input()).rstrip()
+    mask_path="mask_kadid.png"
+    path="/home/victor/Documents/msc-image-database/KADID/kadid10k/images/"
+    root="/home/victor/Documents/msc-data/results/IQA/data/kadid/"
 
-    # amount of images in the folder
-    n = len(os.listdir(path))
+    images = np.arange(1, 82)
 
-    for i in range(1, n + 1):
-        # read the image
-        img = imageio.imread(path + str(i) + '.png')
+    mask = imageio.imread(mask_path)
+    mask = mask[:, :, None] * np.ones(3, dtype=int)[None, None, :]
 
-        # compute the Fourier Transform with the FFT algorithm
-        fft = np.fft.fftshift(np.fft.fft2(img))
+    for i in images:
+        print (colored('Computing image ' + str(i) + '...', 'red'))
+        image_name = 'I'
+        if i < 10:
+            image_name += '0' + str(i)
+        else:
+            image_name += str(i)
 
-        # compute the absolute value of all Fourier coefficients
-        abs_val = np.abs(fft)
+        for distortion in ['_01_', '_02_', '_03_']:
+            arr = []
 
-        # compute the maximum value among all coefficients
-        M = np.max(abs_val)
+            for j in ['01', '02', '03', '04', '05']:
+                name = path + image_name + distortion + j + '.png'
+                img = imageio.imread(name)
 
-        # compute the total number of coefficients that are higher than
-        # the maximum value / 1000
-        Th = abs_val[abs_val > M / 1000].size
+                # compute the Fourier Transform with the FFT algorithm
+                fft = np.fft.fftshift(np.fft.fft2(img))
+                fft = np.multiply(fft, mask)
 
-        print(Th / img.size)
+                # compute the absolute value of all Fourier coefficients
+                abs_val = np.abs(fft)
+
+                # compute the maximum value among all coefficients
+                M = np.max(abs_val)
+
+                # compute the total number of coefficients that are higher than
+                # the maximum value / 1000
+                metric = abs_val[abs_val > M / 1000]
+            
+                res = kurtosis(np.power(metric, 3))
+                arr.append(res)
+
+            np.savetxt(root + image_name + distortion + 'OURS.txt', arr, fmt='%.10f')
 
 if __name__ == "__main__":
     main()
