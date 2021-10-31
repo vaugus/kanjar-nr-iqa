@@ -39,6 +39,7 @@ import sys
 import numpy as np
 
 from scipy.stats import kurtosis
+
 import pywt
 import imageio
 import cv2
@@ -58,50 +59,20 @@ def main():
     The images are named as "x.png", with x = [1,2...,n].
 
     """
-    images = ['bikes',
-              'building2',
-              'buildings',
-              'caps',
-              'carnivaldolls',
-              'cemetry',
-              'churchandcapitol',
-              'coinsinfountain',
-              'dancers',
-              'flowersonih35',
-              'house',
-              'lighthouse',
-              'lighthouse2',
-              'manfishing',
-              'monarch',
-              'ocean',
-              'paintedhouse',
-              'parrots',
-              'plane',
-              'rapids',
-              'sailing1',
-              'sailing2',
-              'sailing3',
-              'sailing4',
-              'statue',
-              'stream',
-              'studentsculpture']
+    mask_path = 'mask_csiq.png'
+    images = [] 
 
-    root = '/home/victor/Documents/msc-data/results/IQA/data/live/'
-    path = '/home/victor/Documents/msc-image-database/LIVE/databaserelease2/blur/'
+    root = '/home/victor/Documents/msc-data/results/IQA/data/csiq/'
+    path = '/home/victor/Documents/msc-image-database/CSIQ/dst_imgs/blur/'
 
     for name in images:
-        print(colored('Computing image ' + str(name) + '...', 'red'))
+        print (colored('Computing image ' + str(name) + '...', 'red'))
         arr = []
+        
+        for j in ['1', '2', '3', '4', '5']:
+            img = imageio.imread(path + name + '.BLUR.' + j + '.png')
 
-        mask = imageio.imread('mask_' + name + '.png')
-        mask = mask[:, :, None] * np.ones(3, dtype=int)[None, None, :]
-
-        for j in ['1', '2', '3', '4', '5', '6']:
-            img = imageio.imread(path + name + '-' + j + '.bmp')
-
-            # compute the Fourier Transform with the FFT algorithm
             fft = np.fft.fftshift(np.fft.fft2(img))
-            fft = np.multiply(fft, mask)
 
             # compute the absolute value of all Fourier coefficients
             abs_val = np.abs(fft)
@@ -111,14 +82,11 @@ def main():
 
             # compute the total number of coefficients that are higher than
             # the maximum value / 1000
-            metric = abs_val[abs_val > M / 1000]
+            Th = abs_val[abs_val > M / 1000].size
 
-            res = kurtosis(np.power(metric, 3))
-            arr.append(res)
-            print(res)
+            print(Th / img.size)
 
-        np.savetxt(root + name + '-OURS.txt', arr, fmt='%.10f')
-
+        np.savetxt(root + image_name + '-FSSF-NEW.txt', arr, fmt='%.10f')
 
 if __name__ == "__main__":
     main()
