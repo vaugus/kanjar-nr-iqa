@@ -2,17 +2,33 @@ from abc import ABC, abstractmethod
 
 import imageio
 import numpy as np
-import termcolor.colored as colored
+
+from typing import NamedTuple
+from termcolor import colored
+
+class DataSet:
+
+    def __init__(self):
+        self.title = ''
+        self.images = []
+        self.image_names = []
+        self.input_folder = ''
+        self.output_folder = ''
 
 class Kanjar(ABC):
 
-    def compute_iqa(self, input_folder, output_folder, images):
+    def __init__(self):
+        self.dataset = DataSet()
 
-        for name in images:
+    def compute_iqa(self):
+
+        dataset = self.dataset
+
+        for name in dataset.image_names:
             print (colored('Computing image ' + str(name) + '...', 'red'))
             arr = []
             
-            img = imageio.imread(input_folder + name)
+            img = imageio.imread(dataset.input_folder + name)
 
             fft = np.fft.fftshift(np.fft.fft2(img))
 
@@ -28,13 +44,23 @@ class Kanjar(ABC):
 
             print(Th / img.size)
 
-        np.savetxt(output_folder + '-kanjar-.txt', arr, fmt='%.10f')
+        output = dataset.output_folder + dataset.title + '-kanjar-.txt'
+        np.savetxt(output, arr, fmt='%.10f')
 
 
     @abstractmethod
-    def required_operations1(self):
+    def load_images(self):
         pass
 
     @abstractmethod
-    def required_operations2(self):
+    def load_image_names(self):
         pass
+
+    @abstractmethod
+    def load_input_folder(self):
+        pass
+
+    @abstractmethod
+    def load_output_folder(self):
+        pass
+
