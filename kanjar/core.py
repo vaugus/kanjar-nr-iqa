@@ -6,46 +6,37 @@ import numpy as np
 from typing import NamedTuple
 from termcolor import colored
 
-class DataSet:
-
-    def __init__(self):
-        self.title = ''
-        self.images = []
-        self.image_names = []
-        self.input_folder = ''
-        self.output_folder = ''
 
 class Kanjar(ABC):
 
-    def __init__(self):
-        self.dataset = DataSet()
-
     def compute_iqa(self):
 
+        # TODO: somehow instantiate the dataset 
         dataset = self.dataset
 
         for name in dataset.image_names:
-            print (colored('Computing image ' + str(name) + '...', 'red'))
-            arr = []
+            message = 'Computing image ' + str(name) + '...'
+            print(colored(message, 'red'))
+            results = []
             
-            img = imageio.imread(dataset.input_folder + name)
+            image = imageio.imread(dataset.input_folder + name)
 
-            fft = np.fft.fftshift(np.fft.fft2(img))
+            fourier_coefficients = np.fft.fftshift(np.fft.fft2(image))
 
             # compute the absolute value of all Fourier coefficients
-            abs_val = np.abs(fft)
+            abs_values = np.abs(fourier_coefficients)
 
             # compute the maximum value among all coefficients
-            M = np.max(abs_val)
+            maximum_value = np.max(abs_values)
 
             # compute the total number of coefficients that are higher than
             # the maximum value / 1000
-            Th = abs_val[abs_val > M / 1000].size
+            total = abs_values[abs_values > maximum_value / 1000].size
 
-            print(Th / img.size)
+            results.append(total / image.size)
 
         output = dataset.output_folder + dataset.title + '-kanjar-.txt'
-        np.savetxt(output, arr, fmt='%.10f')
+        np.savetxt(output, results, fmt='%.10f')
 
 
     @abstractmethod
