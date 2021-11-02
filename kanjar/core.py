@@ -3,13 +3,8 @@ from abc import ABC, abstractmethod
 import os
 import sys
 
-import numpy as np
-
-from scipy.stats import kurtosis
-
-import pywt
 import imageio
-import cv2
+import numpy as np
 from termcolor import colored
 
 class Kanjar(ABC):
@@ -43,7 +38,6 @@ class Kanjar(ABC):
                 print(Th / img.size)
 
             np.savetxt(root + name + '-kanjar-.txt', arr, fmt='%.10f')
-
 
 
     def base_operation1(self):

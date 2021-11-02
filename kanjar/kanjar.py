@@ -38,11 +38,7 @@ import sys
 
 import numpy as np
 
-from scipy.stats import kurtosis
-
-import pywt
 import imageio
-import cv2
 from termcolor import colored
 
 
@@ -86,7 +82,7 @@ def main():
 
             print(Th / img.size)
 
-        np.savetxt(root + image_name + '-FSSF-NEW.txt', arr, fmt='%.10f')
+        np.savetxt(root + '-FSSF-NEW.txt', arr, fmt='%.10f')
 
 if __name__ == "__main__":
     main()

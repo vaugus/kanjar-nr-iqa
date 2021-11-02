@@ -14,3 +14,12 @@ https://www.sciencedirect.com/science/article/pii/S1877705813016007
 
 ### Run
 * python kanjar.py < (path_to_folder_with_images) > (output_file.txt)
+
+
+```bash
+docker build -t kanjar .
+```
+
+```bash
+docker run -it -v $(pwd):/work kanjar bash
+```
