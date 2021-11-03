@@ -7,6 +7,8 @@ from typing import NamedTuple
 from termcolor import colored
 
 
+# JSON: file format, image base name
+
 class Kanjar(ABC):
 
     def compute_iqa(self):
@@ -40,18 +42,7 @@ class Kanjar(ABC):
 
 
     @abstractmethod
-    def load_images(self):
+    def load_dataset(self, **kwargs):
         pass
 
-    @abstractmethod
-    def load_image_names(self):
-        pass
-
-    @abstractmethod
-    def load_input_folder(self):
-        pass
-
-    @abstractmethod
-    def load_output_folder(self):
-        pass
 
