@@ -1,6 +1,6 @@
 import json
 
-from kanjar import Kanjar
+from core import Kanjar
 
 class Live(Kanjar):
 
