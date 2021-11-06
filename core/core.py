@@ -16,6 +16,8 @@ class Kanjar(ABC):
 
     def compute_iqa(self):
 
+        self.load_dataset()
+
         try:
             if not self.dataset:
                 raise Exception('The dataset was not initialized.')

@@ -3,8 +3,6 @@ import unittest
 
 import core
 
-
-
 class DummyKanjarImpl(core.Kanjar):
     def load_dataset(self, **kwargs):
         return super().load_dataset(**kwargs)
@@ -19,6 +17,7 @@ class TestKanjarInterface(unittest.TestCase):
 
     def test_empty_dataset(self):
         dummy_kanjar_impl = DummyKanjarImpl()
+        self.assertIsNotNone(dummy_kanjar_impl)
 
         # Checks that it created a null dataset.
         self.assertIsNone(dummy_kanjar_impl.dataset)
