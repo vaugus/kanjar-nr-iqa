@@ -10,7 +10,19 @@ spec_errors = {
     'assert isinstance(dataset.get(\'title\'), str)': 
         'Title is not a string.',
     'assert bool(dataset.get(\'title\').strip())':
-        'Title is an empty string.'
+        'Title is an empty string.',
+    'assert isinstance(dataset.get(\'images\'), list)':
+        'List of images is not a list.',
+    'assert not dataset.get(\'images\')':
+        'List of images has invalid initialization.',
+    'assert isinstance(img, str)':
+        'An image name is not a string.',
+    'assert bool(img.strip())':
+        'There is an empty image name.',
+    'assert isinstance(dataset.get(\'input_folder\'), str)':
+        'The input folder must be a string.',
+    'assert bool(dataset.get(\'input_folder\').strip())':
+        'The input folder string cannot be empty.'
     }
 
 class JsonDataset(Kanjar):
@@ -60,9 +72,6 @@ class JsonDataset(Kanjar):
             assert isinstance(dataset.get('input_folder'), str)
             assert bool(dataset.get('input_folder').strip())
 
-            assert isinstance(dataset.get('output_folder'), str)
-            assert not bool(dataset.get('output_folder').strip())
-
         except AssertionError as e:
             assert_error = self._parse_assert_error(e)
             message = self._assert_message(assert_error)
@@ -70,6 +79,8 @@ class JsonDataset(Kanjar):
 
         if not valid:
             raise Exception(message)
+            
+        return valid
 
 
     def load_images(self, folder, file_names):
@@ -82,6 +93,7 @@ class JsonDataset(Kanjar):
 
     def load_dataset(self):
         dataset = None
+        images = None
 
         try:
             if self.input_file_name:
@@ -89,10 +101,14 @@ class JsonDataset(Kanjar):
                 dataset = json.load(file)
                 file.close()
 
-            # self.validate_dataset(dataset)
+            is_dataset_valid = self.validate_dataset(dataset)
 
-            # images = self.load_images(dataset.get())
+            if is_dataset_valid:
+                # images = self.load_images(dataset.get('input_folder'), 
+                #                           dataset.get('image_names'))
+                images = []
 
+            dataset['images'] = images
             return dataset
 
         except Exception as e:

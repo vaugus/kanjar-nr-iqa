@@ -13,6 +13,16 @@ class TestJsonDatasetImplementation(unittest.TestCase):
     def tearDown(self):
         os.environ['TESTING'] = 'False'
 
+
+    def _wrap_validation_test(self, base_params, args):
+        message = args.get('msg')
+        validate = base_params.get('validate')
+
+        with self.assertRaisesRegex(Exception, message):
+            _dataset = copy.deepcopy(base_params.get('dataset'))
+            _dataset[args.get('key')] = args.get('value')
+            validate(_dataset)
+
     
     def test_validate_dataset(self):
         json_impl = JsonDataset(input_file_name = './input/json/airplane.json')
@@ -20,17 +30,63 @@ class TestJsonDatasetImplementation(unittest.TestCase):
 
         validate = json_impl.validate_dataset
 
-        validate(dataset)
+        self.assertTrue(validate(dataset))
 
-        with self.assertRaisesRegex(Exception, 'Title is not a string.') as e:
-            _dataset = copy.deepcopy(dataset)
-            _dataset['title'] = 123
-            validate(_dataset)
+        base_params = {
+            'validate': json_impl.validate_dataset,
+            'dataset': dataset
+        }
 
-        with self.assertRaisesRegex(Exception, 'Title is an empty string.') as e:
-            _dataset = copy.deepcopy(dataset)
-            _dataset['title'] = ''
-            validate(_dataset)
+        assert_cases = [
+            {
+                'msg': 'Title is not a string.',
+                'key': 'title',
+                'value': 123
+            },
+            {
+                'msg': 'Title is an empty string.',
+                'key': 'title',
+                'value': ''
+            },
+            {
+                'msg': 'Title is an empty string.',
+                'key': 'title',
+                'value': ''
+            },
+            {
+                'msg': 'List of images is not a list.',
+                'key': 'images',
+                'value': 123
+            },
+            {
+                'msg': 'List of images has invalid initialization.',
+                'key': 'images',
+                'value': ['image.png']
+            },
+            {
+                'msg': 'An image name is not a string.',
+                'key': 'image_names',
+                'value': [1]
+            },
+            {
+                'msg': 'There is an empty image name.',
+                'key': 'image_names',
+                'value': ['']
+            },
+            {
+                'msg': 'The input folder must be a string.',
+                'key': 'input_folder',
+                'value': 123
+            },
+            {
+                'msg': 'The input folder string cannot be empty.',
+                'key': 'input_folder',
+                'value': ''
+            },
+        ]
+
+        for case in assert_cases:
+            self._wrap_validation_test(base_params, case)
 
 
     def test_load_dataset(self):
