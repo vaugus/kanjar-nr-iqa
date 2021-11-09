@@ -26,6 +26,15 @@ class TestJsonDatasetImplementation(unittest.TestCase):
     
     def test_validate_dataset(self):
         json_impl = JsonDataset(input_file_name = './input/json/airplane.json')
+
+        # Redefs for the load images function
+        def mock_load_images(folder, file_names):
+            return []
+
+        # Original function
+        load_images = json_impl.load_images
+
+        json_impl.load_images = mock_load_images
         dataset = json_impl.load_dataset()
 
         validate = json_impl.validate_dataset

@@ -1,5 +1,5 @@
 import json
-import sys
+import os
 import traceback
 
 import imageio
@@ -55,6 +55,7 @@ class JsonDataset(Kanjar):
     def validate_dataset(self, dataset):
         valid = True
         message = None
+
         try:
             assert isinstance(dataset.get('title'), str)
             assert bool(dataset.get('title').strip())
@@ -85,8 +86,10 @@ class JsonDataset(Kanjar):
 
     def load_images(self, folder, file_names):
         images = []
+
         for name in file_names:
-            images.append(imageio.imread(folder + name))
+            img = imageio.imread(folder + name)
+            images.append(img)
 
         return images
 
@@ -104,9 +107,8 @@ class JsonDataset(Kanjar):
             is_dataset_valid = self.validate_dataset(dataset)
 
             if is_dataset_valid:
-                # images = self.load_images(dataset.get('input_folder'), 
-                #                           dataset.get('image_names'))
-                images = []
+                images = self.load_images(dataset.get('input_folder'), 
+                                          dataset.get('image_names'))
 
             dataset['images'] = images
             return dataset
