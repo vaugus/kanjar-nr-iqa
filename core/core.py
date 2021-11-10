@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+import logging
 import os
 
 import imageio
@@ -7,29 +8,23 @@ import numpy as np
 from typing import NamedTuple
 from termcolor import colored
 
-# JSON: file format, image base name
+logging.basicConfig(level=logging.INFO,
+                    format='%(asctime)s - %(levelname)s - %(message)s')
 
 class Kanjar(ABC):
 
-    def __init__(self):
-        self.dataset = None
 
-    def compute_iqa(self):
-
-        self.load_dataset()
+    def compute_iqa(self, dataset):
 
         try:
-            if not self.dataset:
+            if not dataset:
                 raise Exception('The dataset was not initialized.')
-        
-            dataset = self.dataset
 
-            for name in dataset.image_names:
-                message = 'Computing image ' + str(name) + '...'
-                print(colored(message, 'red'))
-                results = []
+            results = []
+            for name in dataset.get('image_names'):
+                logging.info('Computing image ' + str(name))
                 
-                image = imageio.imread(dataset.input_folder + name)
+                image = imageio.imread(dataset.get('input_folder') + name)
 
                 fourier_coefficients = np.fft.fftshift(np.fft.fft2(image))
 
@@ -45,12 +40,12 @@ class Kanjar(ABC):
 
                 results.append(total / image.size)
 
-            output = dataset.output_folder + dataset.title + '-kanjar-.txt'
+            output = 'output/' + dataset.get('title') + '-kanjar.txt'
             np.savetxt(output, results, fmt='%.10f')
 
         except Exception as e:
             if 'False' == os.getenv('TESTING'):
-                print(e)
+                logging.error(e.args)
 
 
     @abstractmethod

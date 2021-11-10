@@ -1,5 +1,5 @@
 import json
-import os
+import logging
 import traceback
 
 import imageio
@@ -25,10 +25,13 @@ spec_errors = {
         'The input folder string cannot be empty.'
     }
 
+
 class JsonDataset(Kanjar):
 
 
     def __init__(self, **kwargs):
+        logging.basicConfig(level=logging.INFO,
+                            format='%(asctime)s - %(levelname)s - %(message)s')
         self.dataset = None
         self.input_file_name = kwargs.get('input_file_name', None)
 
@@ -114,4 +117,4 @@ class JsonDataset(Kanjar):
             return dataset
 
         except Exception as e:
-            print(e)
+            logging.error(e.args)

@@ -23,18 +23,16 @@ class TestJsonDatasetImplementation(unittest.TestCase):
             _dataset[args.get('key')] = args.get('value')
             validate(_dataset)
 
+
+    # Redefs for the load images function
+    def mock_load_images(self, folder, file_names):
+        return []
+
     
     def test_validate_dataset(self):
         json_impl = JsonDataset(input_file_name = './input/json/airplane.json')
 
-        # Redefs for the load images function
-        def mock_load_images(folder, file_names):
-            return []
-
-        # Original function
-        load_images = json_impl.load_images
-
-        json_impl.load_images = mock_load_images
+        json_impl.load_images = self.mock_load_images
         dataset = json_impl.load_dataset()
 
         validate = json_impl.validate_dataset
@@ -101,12 +99,27 @@ class TestJsonDatasetImplementation(unittest.TestCase):
     def test_load_dataset(self):
         json_impl = JsonDataset(input_file_name = './input/json/airplane.json')
 
+        # Original function
+        load_images = json_impl.load_images
         self.assertIsNotNone(json_impl)
         self.assertIsNone(json_impl.dataset)
 
+        json_impl.load_images = self.mock_load_images
         dataset = json_impl.load_dataset()
-
         self.assertIsNotNone(dataset)
+
+        json_impl.load_images = load_images
+        dataset = json_impl.load_dataset()
+        self.assertIsNotNone(dataset)
+
+
+    def test_compute_iqa(self):
+        json_impl = JsonDataset(input_file_name = './input/json/airplane.json')
+        dataset =  json_impl.load_dataset()
+
+        dataset['output_folder'] = ''
+
+        json_impl.compute_iqa(dataset)
 
 
 if __name__ == '__main__':
