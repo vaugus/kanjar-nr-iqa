@@ -1,9 +1,9 @@
 import copy
 import os
-import json
 import unittest
 
 from impl import JsonDataset
+
 
 class TestJsonDatasetImplementation(unittest.TestCase):
 
@@ -12,7 +12,6 @@ class TestJsonDatasetImplementation(unittest.TestCase):
 
     def tearDown(self):
         os.environ['TESTING'] = 'False'
-
 
     def _wrap_validation_test(self, base_params, args):
         message = args.get('msg')
@@ -23,14 +22,12 @@ class TestJsonDatasetImplementation(unittest.TestCase):
             _dataset[args.get('key')] = args.get('value')
             validate(_dataset)
 
-
     # Redefs for the load images function
     def mock_load_images(self, folder, file_names):
         return []
 
-    
     def test_validate_dataset(self):
-        json_impl = JsonDataset(input_file_name = './input/json/airplane.json')
+        json_impl = JsonDataset(input_file_name='./input/json/airplane.json')
 
         json_impl.load_images = self.mock_load_images
         dataset = json_impl.load_dataset()
@@ -95,9 +92,8 @@ class TestJsonDatasetImplementation(unittest.TestCase):
         for case in assert_cases:
             self._wrap_validation_test(base_params, case)
 
-
     def test_load_dataset(self):
-        json_impl = JsonDataset(input_file_name = './input/json/airplane.json')
+        json_impl = JsonDataset(input_file_name='./input/json/airplane.json')
 
         # Original function
         load_images = json_impl.load_images
@@ -112,10 +108,9 @@ class TestJsonDatasetImplementation(unittest.TestCase):
         dataset = json_impl.load_dataset()
         self.assertIsNotNone(dataset)
 
-
     def test_compute_iqa(self):
-        json_impl = JsonDataset(input_file_name = './input/json/airplane.json')
-        dataset =  json_impl.load_dataset()
+        json_impl = JsonDataset(input_file_name='./input/json/airplane.json')
+        dataset = json_impl.load_dataset()
 
         dataset['output_folder'] = ''
 
