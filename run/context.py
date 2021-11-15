@@ -4,7 +4,6 @@
 import sys
 import os
 
-from core import Kanjar
 from impl import JsonDataset
 
 abs_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
