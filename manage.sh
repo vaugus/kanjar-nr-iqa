@@ -9,7 +9,7 @@ case $1 in
     test)
         python -m unittest ;;
     run)
-        python run/json_dataset.py ;;
+        python main.py $2 ;;
     *)
         echo "Unsupported operation."
         echo
