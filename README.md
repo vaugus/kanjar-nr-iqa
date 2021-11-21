@@ -7,6 +7,18 @@ by `Kanjar De and V. Masilamani` in the paper
 _Image Sharpness Measure for Blurred Images in Frequency Domain_
 https://www.sciencedirect.com/science/article/pii/S1877705813016007
 
+The code was built using the Template design pattern in order to allow different dataset loading implementations.
+A JSON implementation is provided, in which the input file consists of:
+
+```json
+{
+    "title": "a string that represents the dataset name",
+    "images": "an array of image files, initially empty",
+    "image_names": "an array with the names of each image file",
+    "input_folder": "the relative or absolute path of the images in the file system"
+}
+```
+
 ## Built With
 - Python 3
 - Numpy
