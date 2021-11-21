@@ -22,7 +22,7 @@ A JSON implementation is provided, in which the input file consists of:
 ## Built With
 - Python 3
 - Numpy
-- imageio
+- Imageio
 - PyCodeStyle
 
 ## How to Use
