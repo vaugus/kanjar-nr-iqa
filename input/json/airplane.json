@@ -1,0 +1,12 @@
+{
+    "title": "airplane-defocus-blur",
+    "images": [],
+    "image_names": [
+        "1.png",
+        "2.png",
+        "3.png",
+        "4.png",
+        "5.png"
+    ],
+    "input_folder": "input/images/"
+}
